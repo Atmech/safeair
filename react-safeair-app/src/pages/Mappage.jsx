@@ -1,35 +1,51 @@
 import Map from "mapmyindia-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // import io from "socket.io-client";
 // const socket = io.connect("http://localhost:3001");
 
-import { getDatabase, ref, set, onValue } from "firebase/database";
+import { getDatabase, ref, onValue } from "firebase/database";
 import { database } from "../firebase";
+import { set } from "lodash";
+
+const markers = [
+	{
+		position: [18.47242418848995, 73.91155514743757],
+		draggable: true,
+		title: "emp1",
+		onClick: (e) => {
+			console.log("clicked ");
+		},
+	},
+];
+
+var lat = 0;
+var lng = 0;
 
 const Mappage = () => {
-	const [location, setLocation] = useState({});
-
-    const [markerData, setMarkerData] = useState([
-        {
-          position: [18.47242418848995, 73.91155514743757],
-          draggable: true,
-          title: "emp1",
-          onClick: (e) => {
-            console.log("clicked");
-          },
-        },
-      ]);
-
-
+	const [location, setLocation] = useState([]);
+	const latitude = useRef("");
+	const longitude = useRef("");
 
 	const fetchdata = async () => {
 		const starCountRef = ref(database, "locations/3");
 		onValue(starCountRef, (snapshot) => {
 			const data = snapshot.val();
-			setLocation(data);
-			console.log(data);
+			updateLocation(data);
 		});
+	};
+
+	const updateLocation = async (data) => {
+		setLocation([
+			JSON.stringify(data.latitude),
+			JSON.stringify(data.longitude),
+		]);
+		latitude.current = JSON.stringify(data.latitude);
+		longitude.current = JSON.stringify(data.longitude);
+		lat = parseFloat(data.latitude);
+		lng = parseFloat(data.longitude);
+		console.log("lat" + lat);
+		console.log("lng" + lng);
 	};
 
 	useEffect(() => {
@@ -40,19 +56,17 @@ const Mappage = () => {
 		};
 	}, []);
 
+	const addMarker = () => {
+		markers.push({
+			position: [lat, lng],
+			draggable: true,
+			title: "emp2",
+			onClick: (e) => {
+				console.log("clicked ");
+			},
+		});
+	};
 
-    const addMarker = (latitude, longitude) => {
-        const newMarker = {
-          position: [location.latitude, location.longitude],
-          draggable: true,
-          title: `emp${markerData.length + 1}`,
-          onClick: (e) => {
-            console.log("clicked");
-          },
-        };
-
-        setMarkerData([...markerData, newMarker]);
-    };
 	// useEffect(() => {
 	//     socket.on("receiveLocation", (receivedLocation) => {
 	//         setLocation(receivedLocation);
@@ -64,7 +78,16 @@ const Mappage = () => {
 		<div>
 			<h1>Map</h1>
 			<Map
-				markers={markerData}
+				markers={[
+					{
+						position: [lat, lng],
+						draggable: true,
+						title: "emp1",
+						onClick: (e) => {
+							console.log("clicked ");
+						},
+					},
+				]}
 			/>
 		</div>
 	);
