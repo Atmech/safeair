@@ -7,7 +7,7 @@ import { getDatabase, ref, set } from "firebase/database";
 import { database } from "./firebase";
 
 import io from "socket.io-client";
-const socket = io.connect("http://192.168.1.4:3001");
+const socket = io.connect("https://vercel.com/samishaikh6810/safeair/4jGZ4s3VStyNM3MJqdZZNroT9gpS:3001");
 
 function App() {
 	const [lacation, setLocation] = useState([]);
