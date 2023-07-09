@@ -6,67 +6,77 @@ import { getDatabase, ref, set } from "firebase/database";
 
 import { database } from "./firebase";
 
+import io from "socket.io-client";
+const socket = io.connect("http://192.168.1.4:3001");
+
 function App() {
 	const [lacation, setLocation] = useState([]);
+	const [isTracking, setIsTracking] = useState(false);
 
-	useEffect(() => {
 		// Function to fetch the device's location and store it in Firebase
 		const fetchAndStoreLocation = () => {
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(
-					async (position) => {
+					(position) => {
 						// Get the latitude and longitude
 						const { latitude, longitude } = position.coords;
 						// Store the location in Firebase
-						await set(ref(database, "locations/3"), {
-							latitude,
-							longitude,
-							timestamp: Date(),
-						});
+            const locationData = { latitude, longitude };
+
+						socket.emit("sendLocation", {
+              latitude: 'dksjhf',
+              longitude:  'asjkhdgj',
+            });
+						// await set(ref(database, "locations/3"), {
+						// 	latitude,
+						// 	longitude,
+						// 	timestamp: Date(),
+						// });
 					},
 					(error) => {
 						console.error("Error retrieving location:", error);
 					}
 				);
+				console.log("fetchAndStoreLocation");
 			} else {
 				console.error("Geolocation is not supported by this browser.");
 			}
 		};
+    
+    const handleStartStop = () => {
+      setIsTracking((prevIsTracking) => !prevIsTracking);
+    };
 
-		// Fetch and store the location every 5 minutes
-		const interval = setInterval(fetchAndStoreLocation, 1000);
+  
+    useEffect(() => {
+      let intervalId = null;
+  
+      if (isTracking) {
+        intervalId = setInterval(fetchAndStoreLocation, 10000);
+      } else {
+        clearInterval(intervalId);
+      }
+  
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, [isTracking]);
 
-		// Clean up the interval when the component is unmounted
-		return () => clearInterval(interval);
-	}, []);
+    useEffect(() => {
+      socket.on("location", (location) => {
+          console.log("message = " + location.latitude);
 
-	function getLocation() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(success, error);
-		} else {
-			console.log("Geolocation not supported");
-		}
+      });
+  }, [socket])
+      
 
-		function success(position) {
-			const latitude = position.coords.latitude;
-			setLocation(position.coords.latitude);
-			const longitude = position.coords.longitude;
-			setLocation(position.coords.longitude);
-			console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
-			console.log(lacation);
-		}
-
-		function error() {
-			console.log("Unable to retrieve your location");
-		}
-	}
 	return (
 		<div className="App">
 			<h1>Home</h1>
 			<a href="/map">Go to Map</a>
-			<button onClick={getLocation}>Sharre my location</button>
+      <button onClick={handleStartStop}>{isTracking ? 'Stop' : 'Start'}</button>
 			<Routes>
-				<Route path="map" element={<Mappage />} />
+				{/* <Route path="map" element={<Mappage />} /> */}
 			</Routes>
 		</div>
 	);
