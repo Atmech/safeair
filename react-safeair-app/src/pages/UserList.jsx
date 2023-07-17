@@ -24,6 +24,7 @@ const UserList = () => {
 	const navigate = useNavigate();
 	const [lat, setLat] = useState(0);
 	const [lng, setLng] = useState(0);
+    const [userEmail, setUserEmail] = useState("");
 
     
 	useEffect(() => {
@@ -41,6 +42,7 @@ const UserList = () => {
 	const changeMap = (user) => {
 		setLat(userData[user].latitude);
 		setLng(userData[user].longitude);
+        setUserEmail(userData[user].email);
 	};
 
 	return (
@@ -97,7 +99,7 @@ const UserList = () => {
 										alt="avatar"
 									/>
 									<span class="text-sm font-medium text-gray-700 dark:text-gray-200">
-										John Doe
+										Safe Air
 									</span>
 								</a>
 
@@ -132,7 +134,7 @@ const UserList = () => {
 						markers={[
 							{
 								position: [lat, lng],
-								title: "name",
+								title: userEmail,
 								onClick: (e) => {
 									console.log("clicked ");
 								},
