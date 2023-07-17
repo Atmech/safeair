@@ -71,16 +71,16 @@ const UserList = () => {
 				</ul>
 			</Card> */}
 			<div className="flex">
-				<aside class="flex flex-col w-1/4 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
+				<aside class="flex flex-col w-1/4 h-screen px-5 py-8 overflow-y-auto bg-black border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
 					<a href="#">
-						<img class="w-auto h-20" src={logo} alt="" />
+						<img class="w-auto h-20 " src={logo} alt="" />
 					</a>
 
 					<div class="flex flex-col justify-between flex-1 mt-6">
 						<nav class="flex-1 -mx-3 space-y-5 mt-16 ">
 							{users.map((user, index) => (
 								<Link
-									class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+									class="flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 									onClick={() => {
 										changeMap(user);
 									}}
@@ -89,7 +89,7 @@ const UserList = () => {
 										{userData[user].email}
 									</span>
 
-                                    <button className=" md:block p-3 px-5 pt-2 text-black bg-red-300 rounded-full baseline hover:bg-brightRedLight">Update</button>
+                                    <button className=" md:block p-1 px-2 pt-1 text-black text-sm bg-gray-300 rounded-full baseline hover:bg-brightRedLight">Update</button>
 								</Link>
 							))}
 						</nav>
@@ -102,7 +102,7 @@ const UserList = () => {
 										src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&h=634&q=80"
 										alt="avatar"
 									/>
-									<span class="text-sm font-medium text-gray-700 dark:text-gray-200">
+									<span class="text-sm font-medium text-white dark:text-gray-200">
 										Safe Air
 									</span>
 								</a>
@@ -131,9 +131,8 @@ const UserList = () => {
 					</div>
 				</aside>
 				<div className=" w-3/4">
-					<h1>Map</h1>
 					<Map
-						height="91vh"
+						height="100vh"
 						zoom={16}
 						markers={[
 							{
