@@ -66,20 +66,23 @@ const UserList = () => {
 		setUserEmail(userData[user].email);
 	};
 
-	const search =() => {
-		let input = document.getElementById('searchbar').value
-		input=input.toLowerCase();
-		let x = document.getElementsByClassName('listItem');
-		  
-		for (let i = 0 ; i < x.length ; i++){ 
-			if (!x[i].innerHTML.toLowerCase().includes(input)) {
-				x[i].style.display="none";
-			}
-			else {
-				x[i].style.display="list-item";                 
+	const search = () => {
+		if (document.getElementById("searchbar") == null) {
+			return;
+		} else {
+			let input = document.getElementById("searchbar").value;
+			input = input.toLowerCase();
+			let x = document.getElementsByClassName("listItem");
+
+			for (let i = 0; i < x.length; i++) {
+				if (!x[i].innerHTML.toLowerCase().includes(input)) {
+					x[i].style.display = "none";
+				} else {
+					x[i].style.display = "list-item";
+				}
 			}
 		}
-	}
+	};
 
 	return (
 		<div>
@@ -136,23 +139,25 @@ const UserList = () => {
 							</div>
 							<div id="list">
 								{users.map((user, index) => (
-								<Link
-									class="listItem flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-									onClick={() => {
-										changeMap(user);
-									}}
-								>
-									<span class="mx-2 text-sm font-medium" key={index}>
-										{userData[user].email}
-									</span>
+									<Link
+										class="listItem flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+										onClick={() => {
+											changeMap(user);
+										}}
+									>
+										<span
+											class="mx-2 text-sm font-medium"
+											key={index}
+										>
+											{userData[user].email}
+										</span>
 
-									<button className=" md:block p-1 px-2 pt-1 text-black text-sm bg-gray-300 rounded-full baseline hover:bg-brightRedLight">
-										Update
-									</button>
-								</Link>
-							))}
+										<button className=" md:block p-1 px-2 pt-1 text-black text-sm bg-gray-300 rounded-full baseline hover:bg-brightRedLight">
+											Update
+										</button>
+									</Link>
+								))}
 							</div>
-							
 						</nav>
 
 						<div class="mt-6">
