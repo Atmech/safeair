@@ -6,6 +6,8 @@ import { getDatabase, ref, set } from "firebase/database";
 
 import { database } from "./firebase";
 import UserList from "./pages/UserList";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 
 // import io from "socket.io-client";
 // const socket = io.connect("https://vercel.com/samishaikh6810/safeair/4jGZ4s3VStyNM3MJqdZZNroT9gpS:3001");
@@ -78,12 +80,14 @@ function App() {
 					element={
 						<>
 							<h1>Home</h1>
-							<a href="/userlist">Go to Map</a>
+							<a href="/signUp">Go to Map</a>
 						</>
 					}
 				/>
-				<Route path="map/" element={<Mappage />} />
+				<Route path="map" element={<Mappage />} />
 				<Route path="userlist" element={<UserList />} />
+				<Route path="signup" element={<SignUp />} />
+				<Route path="signin" element={<SignIn />} />
 			</Routes>
 		</div>
 	);
