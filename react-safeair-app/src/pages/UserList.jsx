@@ -24,25 +24,31 @@ const UserList = () => {
 	const navigate = useNavigate();
 	const [lat, setLat] = useState(0);
 	const [lng, setLng] = useState(0);
-    const [userEmail, setUserEmail] = useState("");
+	const [userEmail, setUserEmail] = useState("");
 
-    
 	useEffect(() => {
-		const db = getDatabase();
-		const starCountRef = ref(db, "locations/");
-		onValue(starCountRef, (snapshot) => {
-			const data = snapshot.val();
-			console.log(Object.keys(data));
-			setUsers(Object.keys(data));
-			setUserData(data);
-			
-		});
+		let intervalId = null;
+		intervalId = setInterval(() => {
+			const db = getDatabase();
+			const starCountRef = ref(db, "locations/");
+			onValue(starCountRef, (snapshot) => {
+				const data = snapshot.val();
+				console.log(Object.keys(data));
+				setUsers(Object.keys(data));
+				setUserData(data);
+			});
+		}, 1000);
+		return () => {
+			clearInterval(intervalId);
+		};
 	}, []);
 
 	const changeMap = (user) => {
-		setLat(userData[user].latitude);
-		setLng(userData[user].longitude);
-        setUserEmail(userData[user].email);
+		
+				setLat(userData[user].latitude);
+				setLng(userData[user].longitude);
+				setUserEmail(userData[user].email);
+		
 	};
 
 	return (
@@ -67,11 +73,7 @@ const UserList = () => {
 			<div className="flex">
 				<aside class="flex flex-col w-1/4 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-900 dark:border-gray-700">
 					<a href="#">
-						<img
-							class="w-auto h-20"
-							src={logo}
-							alt=""
-						/>
+						<img class="w-auto h-20" src={logo} alt="" />
 					</a>
 
 					<div class="flex flex-col justify-between flex-1 mt-6">
@@ -86,6 +88,8 @@ const UserList = () => {
 									<span class="mx-2 text-sm font-medium" key={index}>
 										{userData[user].email}
 									</span>
+
+                                    <button className=" md:block p-3 px-5 pt-2 text-black bg-red-300 rounded-full baseline hover:bg-brightRedLight">Update</button>
 								</Link>
 							))}
 						</nav>
