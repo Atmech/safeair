@@ -82,7 +82,7 @@ const UserList = () => {
 									}}
 								>
 									<span class="mx-2 text-sm font-medium" key={index}>
-										{userData[user].name}
+										{userData[user].email}
 									</span>
 								</Link>
 							))}
