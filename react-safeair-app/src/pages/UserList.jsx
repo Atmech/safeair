@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import Map from "mapmyindia-react";
 import logo from "../assets/safeair.png";
+import emp from "../assets/teamwork.png";
 
 import {
 	Card,
@@ -28,6 +29,8 @@ const UserList = () => {
 	const [lng, setLng] = useState(0);
 	const [userEmail, setUserEmail] = useState("");
 
+	const initialRender = useRef(true);
+
 	useEffect(() => {
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
@@ -53,6 +56,13 @@ const UserList = () => {
 				console.log(Object.keys(data));
 				setUsers(Object.keys(data));
 				setUserData(data);
+				// if (uid == "") {
+				// 	console.log("uid is null");
+				// } else {
+				// 	setLat(userData[uid].latitude);
+				// 	setLng(userData[uid].longitude);
+				// 	setUserEmail(userData[uid].email);
+				// }
 			});
 		}, 1000);
 		return () => {
@@ -61,10 +71,30 @@ const UserList = () => {
 	}, []);
 
 	const changeMap = (user) => {
-		setLat(userData[user].latitude);
-		setLng(userData[user].longitude);
-		setUserEmail(userData[user].email);
+		// // setUid(user);
+		// let intervalId = null;
+		// intervalId = setInterval(() => {
+			setLat(userData[user].latitude);
+			setLng(userData[user].longitude);
+			setUserEmail(userData[user].email);
+		// }, 5000);
 	};
+
+	// useEffect(() => {
+	// 	if (initialRender.current) {
+	// 		initialRender.current = false;
+	// 	} else {
+	// 		let intervalId = null;
+	// 		intervalId = setInterval(() => {
+	// 			setLat(userData[uid].latitude);
+	// 			setLng(userData[uid].longitude);
+	// 			setUserEmail(userData[uid].email);
+	// 		}, 1000);
+	// 		return () => {
+	// 			clearInterval(intervalId);
+	// 		};
+	// 	}
+	// }, [uid]);
 
 	const search = () => {
 		if (document.getElementById("searchbar") == null) {
@@ -114,7 +144,7 @@ const UserList = () => {
 							<div class="relative mx-3">
 								<span class="absolute inset-y-0 left-0 flex items-center pl-3">
 									<svg
-										class="w-5 h-5 text-gray-400"
+										class="w-5 h-5 text-gray-700"
 										viewBox="0 0 24 24"
 										fill="none"
 									>
@@ -134,13 +164,13 @@ const UserList = () => {
 									onkeyup={search()}
 									name="search"
 									placeholder="Search..."
-									class="w-full py-1.5 pl-10 pr-4 text-gray-700 bg-white border rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
+									class="w-full py-2.5 pl-10 pr-4 text-gray-700 bg-gray-300 border rounded-full dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:ring-opacity-40 focus:outline-none focus:ring"
 								/>
 							</div>
-							<div id="list">
+							<div id="list" className=" mb-24">
 								{users.map((user, index) => (
 									<Link
-										class="listItem flex items-center px-3 py-2 text-white transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
+										class="listItem flex items-center list-none list justify-center px-7 py-3 text-white bg-gray-800 my-5 mx-5 transition-colors duration-300 transform rounded-full dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
 										onClick={() => {
 											changeMap(user);
 										}}
@@ -152,15 +182,33 @@ const UserList = () => {
 											{userData[user].email}
 										</span>
 
-										<button className=" md:block p-1 px-2 pt-1 text-black text-sm bg-gray-300 rounded-full baseline hover:bg-brightRedLight">
+										<button className="   py-1 px-2  text-black text-sm bg-gray-300 rounded-full baseline hover:bg-brightRedLight">
 											Update
 										</button>
+
+										{/* {userData[user].status} == null ? ( <div className=" h-3 w-3 bg-red-500 rounded-full"></div> ) : ( <div className=" h-3 w-3 bg-green-500 rounded-full"></div> )} */}
+
+										<div
+											className={
+												userData[user].status == "offline"
+													? "h-3 w-3 bg-red-500 rounded-full"
+													: "h-3 w-3 bg-green-500 rounded-full"
+											}
+										></div>
 									</Link>
 								))}
 							</div>
 						</nav>
 
-						<div class="mt-6">
+						<div class=" flex flex-col fixed bottom-0 left-0 pl-7 py-7 bg-black w-full ">
+							<div>
+								<Link to="/employees" class="flex items-center gap-x-2">
+									<img src={emp} alt="" className=" h-7" />
+									<span class="font-medium text-lg text-white dark:text-gray-200">
+										Employees
+									</span>
+								</Link>
+							</div>
 							<div class="flex items-center justify-between mt-6">
 								<a href="#" class="flex items-center gap-x-2">
 									<img
@@ -211,6 +259,9 @@ const UserList = () => {
 								title: userEmail,
 								onClick: (e) => {
 									console.log("clicked ");
+								},
+								onMouseover: (e) => {
+									// show info window with title
 								},
 							},
 						]}
