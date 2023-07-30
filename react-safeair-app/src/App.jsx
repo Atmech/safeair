@@ -6,6 +6,7 @@ import { getDatabase, ref, set } from "firebase/database";
 
 import { database } from "./firebase";
 import UserList from "./pages/UserList";
+import Map from "./pages/Map";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import Employees from "./pages/Employees";
@@ -87,6 +88,7 @@ function App() {
 					}
 				/>
 				<Route path="map" element={<Mappage />} />
+				<Route path="map2" element={<Map/>} />
 				<Route path="userlist" element={<UserList />} />
 				<Route path="signup" element={<SignUp />} />
 				<Route path="signin" element={<SignIn />} />
